@@ -90,6 +90,11 @@ ZIP: any 5 digits
 - Successful payment redirects to ```/success```
 - PaymentIntent is created in the Stripe Dashboard (Test Mode)
 
+## Demo Video
+
+[Watch the demo](assets/demo.mp4)
+
+
 ### References
 - [Stripe Docs: Accept a Payment](https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=embedded-form)
 - [Stripe Payment Element](https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=embedded-form)
