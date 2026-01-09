@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stripe Embedded Payment</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Stripe Embedded Payment Demo</h1>
+
+    <form id="payment-form">
+      <div id="payment-element"></div>
+      <button id="submit">
+        <span id="button-text">Pay $20</span>
+      </button>
+      <div id="error-message"></div>
+    </form>
+  </div>
+
+  <script>
+    const stripe = Stripe("{{ publishable_key }}");
+
+    fetch("/create-payment-intent", {
+      method: "POST",
+    })
+    .then(res => res.json())
+    .then(data => {
+      const elements = stripe.elements({
+        clientSecret: data.clientSecret
+      });
+
+      const paymentElement = elements.create("payment");
+      paymentElement.mount("#payment-element");
+
+      const form = document.getElementById("payment-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: window.location.origin + "/success",
+          },
+        });
+
+        if (error) {
+          document.getElementById("error-message").textContent = error.message;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
